@@ -78,7 +78,7 @@ function AuthContextProvider(props) {
                     user: response.data.user
                 }
             })
-            history.push("/login");
+            this.loginUser(email, password);
         }
     }
 
