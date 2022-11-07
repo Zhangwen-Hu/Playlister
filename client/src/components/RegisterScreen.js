@@ -12,6 +12,7 @@ import Link from '@mui/material/Link';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import MUIErrorModal from './MUIErrorModal';
 
 export default function RegisterScreen() {
     const { auth } = useContext(AuthContext);
@@ -119,6 +120,7 @@ export default function RegisterScreen() {
                     </Box>
                 </Box>
                 <Copyright sx={{ mt: 5 }} />
+                <MUIErrorModal></MUIErrorModal>
             </Container>
     );
 }
