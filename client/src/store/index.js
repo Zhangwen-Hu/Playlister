@@ -26,6 +26,7 @@ export const GlobalStoreActionType = {
     CREATE_NEW_LIST: "CREATE_NEW_LIST",
     LOAD_ID_NAME_PAIRS: "LOAD_ID_NAME_PAIRS",
     MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION",
+    UNMARK_LIST_FOR_DELETION: "UNMARK_LIST_FOR_DELETION",
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
     EDIT_SONG: "EDIT_SONG",
@@ -141,6 +142,22 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: payload.playlist
                 });
             }
+
+            // CANCEL DELETING A LIST
+            case GlobalStoreActionType.UNMARK_LIST_FOR_DELETION: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentList: null,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null
+                });
+            }
+
             // UPDATE A LIST
             case GlobalStoreActionType.SET_CURRENT_LIST: {
                 return setStore({
@@ -263,7 +280,7 @@ function GlobalStoreContextProvider(props) {
 
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
-        let newListName = "Untitled" + store.newListCounter;
+        let newListName = "Untitled";
         const response = await api.createPlaylist(newListName, [], auth.user.email);
         console.log("createNewList response: " + response);
         if (response.status === 201) {
@@ -318,10 +335,18 @@ function GlobalStoreContextProvider(props) {
         }
         getListToDelete(id);
     }
+
+    store.unmarkListForDeletion = function () {
+        storeReducer({
+            type: GlobalStoreActionType.UNMARK_LIST_FOR_DELETION,
+            payload: {}
+        });
+    }
+
     store.deleteList = function (id) {
         async function processDelete(id) {
             let response = await api.deletePlaylistById(id);
-            if (response.data.success) {
+            if (response.status === 200) {
                 store.loadIdNamePairs();
                 history.push("/");
             }
@@ -391,7 +416,7 @@ function GlobalStoreContextProvider(props) {
     }
     store.addNewSong = function() {
         let index = this.getPlaylistSize();
-        this.addCreateSongTransaction(index, "Untitled", "?", "dQw4w9WgXcQ");
+        this.addCreateSongTransaction(index, "Untitled", "Unknown", "dQw4w9WgXcQ");
     }
     // THIS FUNCTION CREATES A NEW SONG IN THE CURRENT LIST
     // USING THE PROVIDED DATA AND PUTS THIS SONG AT INDEX
@@ -448,7 +473,7 @@ function GlobalStoreContextProvider(props) {
     store.addNewSong = () => {
         let playlistSize = store.getPlaylistSize();
         store.addCreateSongTransaction(
-            playlistSize, "Untitled", "?", "dQw4w9WgXcQ");
+            playlistSize, "Untitled", "Unknown", "dQw4w9WgXcQ");
     }
     // THIS FUNCDTION ADDS A CreateSong_Transaction TO THE TRANSACTION STACK
     store.addCreateSongTransaction = (index, title, artist, youTubeId) => {
