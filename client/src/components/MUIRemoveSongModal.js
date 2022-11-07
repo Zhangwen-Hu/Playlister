@@ -27,10 +27,6 @@ export default function MUIRemoveSongModal() {
         store.hideModals();
     }
     
-    let modalClass = "modal";
-    if (store.isRemoveSongModalOpen()) {
-        modalClass += " is-visible";
-    }
     let songTitle = "";
     if (store.currentSong) {
         songTitle = store.currentSong.title;
@@ -43,10 +39,10 @@ export default function MUIRemoveSongModal() {
             <Box sx={style}>
             <div
         id="remove-song-modal"
-        className={modalClass}
+        className="modal-dialog"
         data-animation="slideInOutLeft">
-        <div className="modal-root" id='verify-remove-song-root'>
-            <div className="modal-north">
+        <div className="" id='verify-remove-song-root'>
+            <div className="modal-header">
                 Remove {songTitle}?
             </div>
             <div className="modal-center">
