@@ -12,7 +12,6 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 
 export default function AppBanner() {
     const { auth } = useContext(AuthContext);
@@ -92,14 +91,14 @@ export default function AppBanner() {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
                 <Toolbar>
-                    <Typography                        
-                        variant="h4"
-                        noWrap
-                        component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' } }}                        
-                    >
-                        <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>
-                    </Typography>
+                    <IconButton 
+                    size="large"
+                    color="inherit"
+                    disabled={!store.canClose()}
+                    onClick={store.closeCurrentList}
+                    variant="contained">
+                    ⌂
+                    </IconButton>
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton
