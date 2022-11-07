@@ -94,7 +94,6 @@ export default function AppBanner() {
                     <IconButton 
                     size="large"
                     color="inherit"
-                    disabled={!store.canClose()}
                     onClick={store.closeCurrentList}
                     variant="contained">
                     ⌂
